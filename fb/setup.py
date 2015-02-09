@@ -22,5 +22,5 @@ class FireBase(object):
 	"""
 	push data to firebase
 	"""
-	
+	def 
 		
