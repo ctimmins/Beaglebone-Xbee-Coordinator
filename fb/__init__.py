@@ -1,1 +1,1 @@
-from fb.setup import FireBase
+from fb.fb import FireBase
