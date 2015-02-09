@@ -9,7 +9,7 @@ and returns a formatted data structure that can be used to retrieve
 data and configuration options.
 
 Received Messages Format: 
-	[0x00][LSB][SrcAddrHigh][SrcAddrLow][junk][0x00][data][...][CheckSum]
+	[0x00][LSB][SrcAddrHigh][SrcAddrLow][junk][0x00][..data..][CheckSum]
 
 """
 

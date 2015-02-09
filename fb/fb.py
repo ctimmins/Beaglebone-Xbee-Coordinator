@@ -1,5 +1,5 @@
 """
-setup.py 
+fb.py 
 
 By Chad Timmins, 2015
 chadtimmins@gmail.com 
@@ -22,5 +22,8 @@ class FireBase(object):
 	"""
 	push data to firebase
 	"""
-	def 
+	def pushData(self, location="winery", node="0", data={}, time):
+		url = location + "/" + node
+
+
 		
