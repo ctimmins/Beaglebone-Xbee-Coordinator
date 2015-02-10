@@ -24,6 +24,7 @@ class FireBase(object):
 	"""
 	def pushData(self, location="winery", node="0", data={}, time):
 		url = location + "/" + node
+		
 
 
 		
