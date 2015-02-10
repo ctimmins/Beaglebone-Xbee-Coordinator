@@ -80,7 +80,6 @@ if __name__ == '__main__':
 			n_url = "%s/%s" % (s_location, node_name)
 			fb.put(n_url, time, fb_payload)
 			
-			
 
 			#xbee.SendStr(str(data), src)
 			sleep(0.25)

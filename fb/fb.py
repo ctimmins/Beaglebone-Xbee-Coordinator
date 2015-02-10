@@ -22,9 +22,9 @@ class FireBase(object):
 	"""
 	push data to firebase
 	"""
-	def pushData(self, location="winery", node="0", data={}, time):
+	def pushData(self, location="winery", node="0", data={}, time=0):
 		url = location + "/" + node
-		
+
 
 
 		
