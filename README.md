@@ -5,7 +5,7 @@ Coordinates a network of Xbee's and uploads sensor data to Firebase
 
 ## Firebase Data Format Sample
 ```javascript
-/Node0 
+"Node0" : { 
 	
 	"Latitude":  '31.981',
 
@@ -48,6 +48,7 @@ Coordinates a network of Xbee's and uploads sensor data to Firebase
 			"vwc": 43
 		}
 	}
+}
 	
 ```
 
