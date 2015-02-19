@@ -32,6 +32,8 @@ def parseXbeeMsg(msg):
 
 """
 Parses data and formats for firebase uploading
+
+Received Data Format:
 """
 def parseData(msg):
 	# split comma separated data portion of incoming message 
@@ -65,6 +67,16 @@ def parseData(msg):
 	s_location = 'Winery'
 	n_url = "%s/%s" % (s_location, node_name)
 	fb.put(n_url, time, fb_payload)
-	
 
+"""
+Method for debugging by printing received data
+"""	
+def logData(data={}):
+	try:
+		print "src: %s" % data["SrcAddr"]
+		print "message length: %s" % data["MsgLen"] 
+		print "Chksm: %s" % data["CheckSum"]
+		print "Message: %s" % data["Data"]
+	except KeyError:
+		print "Missing Key"	
 
