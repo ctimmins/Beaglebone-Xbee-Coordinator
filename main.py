@@ -6,7 +6,13 @@ from fb.fb import FireBase
 if __name__ == '__main__':
 
 	fb = FireBase('fbUrl', 'fbEmail', 'fbSecret')
-	stem = Stem()
+	s_cmds = {
+		'Vegetronix': 'V',
+		'MLX':        'M',
+		'Cksm_Err':   'CE',
+		'Who_Am_I':   'W',
+	}
+	stem = Stem(cmds=s_cmds)
 
 	while True:
 		try:
@@ -17,5 +23,5 @@ if __name__ == '__main__':
 			break
 
 	if stem.serial.isOpen():
-		print 'closing serial port from main'
+		print '\nclosing serial port from main\n'
 		stem.serial.close()
