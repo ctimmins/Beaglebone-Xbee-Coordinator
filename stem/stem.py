@@ -70,15 +70,19 @@ class Stem():
 			return self.handleCommand('CE') 
 
 		# use cmd to determine next action with remaining data
-		return self.handleCommand(src, cmd, data[1:-1])
+		pkg = self.handleCommand(cmd, data[1:-1])
+		return [src, pkg]
 
 	"""
 	use predefined commands to handle incoming data
 	"""
-	def handleCommand(self, src, cmd, data=''):
+	def handleCommand(self, cmd, data=''):
 		try:
 			if cmd == self.cmds.get('Vegetronix'):
-				return self.onVegRead(data)
+				pkg = {}
+				pkg['type'] = 'soil sensors'
+				pkg['data'] = self.onVegRead(data)
+				return pkg
 				
 			elif cmd == self.cmds.get('MLX_Std'):
 				"""
@@ -112,6 +116,7 @@ class Stem():
 	"""
 	def onVegRead(self, data):
 		pkg = {}
+		print 'len(data): %s' % len(data)
 		# build package to be timestamped
 		for i in range(len(data)):
 			s_data = data[i].split(':')
