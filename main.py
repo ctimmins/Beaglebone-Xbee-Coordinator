@@ -7,17 +7,21 @@ if __name__ == '__main__':
 
 	fb = FireBase('fbUrl', 'fbEmail', 'fbSecret')
 	s_cmds = {
-		'Vegetronix': 'V',
-		'MLX':        'M',
-		'Cksm_Err':   'CE',
-		'Who_Am_I':   'W',
+		'Vegetronix':     'V',
+		'MLX_Std':        'M',
+		'MLX_Config':     'MC',
+		'Cksm_Err':       'CE',
+		'Who_Am_I':       'W',
 	}
 	stem = Stem(cmds=s_cmds)
-
+	print stem.getTime()
+	print ''
 	while True:
 		try:
+			print 'waiting for frame...'
 			msg = stem.xbee.wait_read_frame()
-			stem.onMsgReceive(msg)
+			print stem.onMsgReceive(msg)
+			print ''
 			sleep(0.25)
 		except KeyboardInterrupt:
 			break

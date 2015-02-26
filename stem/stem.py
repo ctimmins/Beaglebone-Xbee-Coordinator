@@ -10,7 +10,7 @@ Provides a set of functions specific to our senior design agricultural monitorin
 import serial
 from xbee import XBee
 from datetime import datetime
-import stem_helpers as sth
+import stem_helpers
 import Adafruit_BBIO.UART as BB_UART
 
 class Stem():
@@ -21,7 +21,7 @@ class Stem():
 
 		# instantiate XBee and serial port objects
 		self.serial = serial.Serial(port, baud)
-		self.xbee = XBee(self.serial)
+		self.xbee = XBee(self.serial, escaped=True)
 
 		# make data structure to hold node settings
 		self.nodes = {}
@@ -44,7 +44,7 @@ class Stem():
 		print 'onStartup function calls'
 
 	def onMsgReceive(self, msg):
-		time_stamp = self.getTime()
+		#time_stamp = self.getTime()
 		src = msg.get('source_addr')
 		if src != None:
 			# left shift MSB and OR to get src value
@@ -64,46 +64,33 @@ class Stem():
 		data = msg.get('rf_data').split(',')
 		cmd = data[0]
 		check_sum = data[-1]
-		
-		print time_stamp
 
 		# if check_sum is not valid, set command to Checksum Error
-		if not sth.verifyCheckSum(check_sum):
-			cmd = self.cmds.get('Cksm_Err') 
+		if not stem_helpers.verifyCheckSum(check_sum):
+			return self.handleCommand('CE') 
 
-		
+		# use cmd to determine next action with remaining data
+		return self.handleCommand(src, cmd, data[1:-1])
 
-	def onVegRead(data):
-		"""
-		handles vegetronix data
-		"""
-
-	def onMLXRead(data):
-		"""
-		handles MLX data
-		"""
-	
-	def parseData(self, data):
-		"""
-		code for parsing data 
-		"""
-
-	def updateNodeSettings(self, src):
-		print 'updating node settings\n'
-		"""
-		this is where code for updating a node's settings goes
-		"""
-	def handleCommand(cmd):
+	"""
+	use predefined commands to handle incoming data
+	"""
+	def handleCommand(self, src, cmd, data=''):
 		try:
 			if cmd == self.cmds.get('Vegetronix'):
-				v_data = data[1:-1]
-				self.onVegRead(v_data)
+				return self.onVegRead(data)
 				
-			elif cmd == self.cmds.get('MLX'):
+			elif cmd == self.cmds.get('MLX_Std'):
 				"""
-				handle MLX reading
+				handle Standard MLX reading
 				"""
-				print 'MLX reading\n'
+				print 'Standard MLX reading\n'
+
+			elif cmd == self.cmds.get('MLX_Config'):
+				"""
+				handle MLX Settings update
+				"""
+				print 'MLX update\n'
 
 			elif cmd == self.cmds.get('Cksm_Err'):
 				""" 
@@ -119,3 +106,37 @@ class Stem():
 
 		except IndexError:
 				print 'Index Error\n'
+
+	"""
+	handles vegetronix data
+	"""
+	def onVegRead(self, data):
+		pkg = {}
+		# build package to be timestamped
+		for i in range(len(data)):
+			s_data = data[i].split(':')
+			s_lev = s_data[0]
+			s_vwc = s_data[1]
+			s_temp = s_data[2]
+			pkg[s_lev] = {
+				"vwc": s_vwc,
+				"temp": s_temp
+			}
+
+		return pkg
+
+	def onMLXRead(self, data):
+		"""
+		handles MLX data
+		"""
+	
+	def parseData(self, data):
+		"""
+		code for parsing data 
+		"""
+
+	def updateNodeSettings(self, src):
+		print 'updating node settings\n'
+		"""
+		this is where code for updating a node's settings goes
+		"""
