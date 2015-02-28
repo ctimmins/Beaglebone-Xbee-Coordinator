@@ -12,8 +12,16 @@ if __name__ == '__main__':
 	# defined commands
 	s_cmds = {
 		'Vegetronix':     'V',
+		'IR_Low':         'IL',
+		'IR_High':        'IH',
+		'IR_Sens':        'Se',
+		'IR_Slope':       'Sl',
 		'MLX_Std':        'M',
-		'MLX_Config':     'MC',
+		'MLX_Params':     'MP',
+		'MLX_Comp':       'MC',
+		'Pixel_Offset':   'PO',
+		'MLX_PTAT':       'Pt',
+		'MLX_PTAT_Param': 'PP',
 		'Cksm_Err':       'CE',
 		'Who_Am_I':       'W',
 	}
@@ -25,6 +33,10 @@ if __name__ == '__main__':
 		try:
 			print 'waiting for frame...'
 			msg = stem.xbee.wait_read_frame()
+			res = stem.onMsgReceive(msg)
+			"""
+			if msg['rf_data'][0] != 'V':
+				continue
 			res =  stem.onMsgReceive(msg)
 			# source node is first element
 			node = res[0]
@@ -36,8 +48,12 @@ if __name__ == '__main__':
 			timeStamp = stem.getTime()
 			# build URL for PUT request
 			url = '%s/%s' % (node, readType)
-
+			#print 'time stamp: %s' % timeStamp
+			#print 'url: %s' % url
+			#print 'pkg: %s' % pkg
 			print fb.put(url, timeStamp, pkg)
+			"""
+			print msg
 			print ''
 			sleep(0.25)
 		except KeyboardInterrupt:

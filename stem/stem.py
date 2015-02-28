@@ -66,7 +66,7 @@ class Stem():
 		check_sum = data[-1]
 
 		# if check_sum is not valid, set command to Checksum Error
-		if not stem_helpers.verifyCheckSum(check_sum):
+		if not stem_helpers.verifyCheckSum(data[1:-1], check_sum, cmd):
 			return self.handleCommand('CE') 
 
 		# use cmd to determine next action with remaining data
@@ -90,11 +90,11 @@ class Stem():
 				"""
 				print 'Standard MLX reading\n'
 
-			elif cmd == self.cmds.get('MLX_Config'):
+			elif cmd == self.cmds.get('MLX_Comp'):
 				"""
 				handle MLX Settings update
 				"""
-				print 'MLX update\n'
+				print 'MLX compensation\n'
 
 			elif cmd == self.cmds.get('Cksm_Err'):
 				""" 
