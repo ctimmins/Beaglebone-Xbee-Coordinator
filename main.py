@@ -34,6 +34,7 @@ if __name__ == '__main__':
 			print 'waiting for frame...'
 			msg = stem.xbee.wait_read_frame()
 			res = stem.onMsgReceive(msg)
+			print stem.getTime()
 			"""
 			if msg['rf_data'][0] != 'V':
 				continue
@@ -53,7 +54,7 @@ if __name__ == '__main__':
 			#print 'pkg: %s' % pkg
 			print fb.put(url, timeStamp, pkg)
 			"""
-			print msg
+			#print msg
 			print ''
 			sleep(0.25)
 		except KeyboardInterrupt:

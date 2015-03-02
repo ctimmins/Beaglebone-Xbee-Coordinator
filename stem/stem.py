@@ -92,9 +92,39 @@ class Stem():
 
 			elif cmd == self.cmds.get('MLX_Comp'):
 				"""
-				handle MLX Settings update
+				handle MLX Compensation update
 				"""
 				print 'MLX compensation\n'
+
+			elif cmd == self.cmds.get('MLX_PTAT'):
+				"""
+				handle MLX PTAT 
+				"""
+				print 'MLX PTAT\n'
+
+			elif cmd == self.cmds.get('IR_Low'):
+				"""
+				handle IR Frame low 
+				"""
+				print 'IR Low\n'
+
+			elif cmd == self.cmds.get('IR_High'):
+				"""
+				handle IR Frame High 
+				"""
+				print 'IR High\n'
+
+			elif cmd == self.cmds.get('IR_Slope'):
+				"""
+				handle IR Slope
+				"""
+				print 'IR Slope\n'
+
+			elif cmd == self.cmds.get('IR_Sens'):
+				"""
+				handle IR Sensitivity 
+				"""
+				print 'IR Sensitivity\n'
 
 			elif cmd == self.cmds.get('Cksm_Err'):
 				""" 
