@@ -12,6 +12,7 @@ from xbee import XBee
 from datetime import datetime
 import stem_helpers
 import Adafruit_BBIO.UART as BB_UART
+import numpy as np
 
 class Stem():
 	def __init__(self, uart='UART2', port='/dev/ttyO2', baud=9600, cmds={}):
@@ -28,6 +29,9 @@ class Stem():
 
 		# Map of commands as defined by user/client
 		self.cmds = cmds 
+
+		#MLX settings
+		self.mlx = MLX({'V_th': 0x1A68,'Kt_1': 0x5B77,'Kt_2': 0x1234})
 
 		# Execute startup code
 		self.onStartup()
@@ -100,19 +104,33 @@ class Stem():
 				"""
 				handle MLX PTAT 
 				"""
-				print 'MLX PTAT\n'
+				print 'MLX PTAT'
+
+				pkg = {}
 
 			elif cmd == self.cmds.get('IR_Low'):
 				"""
 				handle IR Frame low 
 				"""
-				print 'IR Low\n'
+				print 'IR Low'
+				pkg = {}
+				pkg['type'] = 'IR Readings'
+				pkg['data'] = self.onIrRead(data[0])
+				
+				print 'irl: %s' % pkg
+				return pkg
 
 			elif cmd == self.cmds.get('IR_High'):
 				"""
 				handle IR Frame High 
 				"""
-				print 'IR High\n'
+				print 'IR High'
+				pkg = {}
+				pkg['type'] = 'IR Readings'
+				pkg['data'] = self.onIrRead(data[0])
+				print 'irh: %s' % pkg
+
+				return pkg
 
 			elif cmd == self.cmds.get('IR_Slope'):
 				"""
@@ -159,6 +177,11 @@ class Stem():
 			}
 
 		return pkg
+
+	def onIrRead(self, data):
+		data_arr = np.fromstring(data, dtype=np.uint16)
+		return data_arr
+
 
 	def onMLXRead(self, data):
 		"""

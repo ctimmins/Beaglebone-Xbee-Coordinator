@@ -3,6 +3,7 @@ from stem.stem import Stem
 from time import sleep
 from firebase.firebase import FirebaseApplication, FirebaseAuthentication
 from userconfig import config
+
 if __name__ == '__main__':
 	# configure firebase settings
 	cf = config()
@@ -26,6 +27,8 @@ if __name__ == '__main__':
 		'Who_Am_I':       'W',
 	}
 
+
+
 	stem = Stem(cmds=s_cmds)
 	print stem.getTime()
 	print ''
@@ -34,28 +37,25 @@ if __name__ == '__main__':
 			print 'waiting for frame...'
 			msg = stem.xbee.wait_read_frame()
 			res = stem.onMsgReceive(msg)
-			print stem.getTime()
-			"""
-			if msg['rf_data'][0] != 'V':
-				continue
-			res =  stem.onMsgReceive(msg)
-			# source node is first element
-			node = res[0]
-			#data payload is second element
-			data = res[1]
-			readType = data['type']
-			pkg = data['data']
-			# get time stamp of data collection
-			timeStamp = stem.getTime()
-			# build URL for PUT request
-			url = '%s/%s' % (node, readType)
-			#print 'time stamp: %s' % timeStamp
-			#print 'url: %s' % url
-			#print 'pkg: %s' % pkg
-			print fb.put(url, timeStamp, pkg)
-			"""
+
+			if msg['rf_data'][0] == 'V':
+				# source node is first element
+				node = res[0]
+				#data payload is second element
+				data = res[1]
+				readType = data['type']
+				pkg = data['data']
+				# get time stamp of data collection
+				timeStamp = stem.getTime()
+				# build URL for PUT request
+				url = '%s/%s' % (node, readType)
+				print 'time stamp: %s' % timeStamp
+				print 'url: %s' % url
+				print 'pkg: %s' % pkg
+				#print fb.put(url, timeStamp, pkg)
+			
 			#print msg
-			print ''
+			print '--------------------------------'
 			sleep(0.25)
 		except KeyboardInterrupt:
 			break
