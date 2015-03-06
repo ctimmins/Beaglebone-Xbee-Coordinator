@@ -51,11 +51,7 @@ if __name__ == '__main__':
 			If there is an error from the checksum, send commands
 			back to PSoC for retransmit
 			"""
-			if res.get('data') == None:
-				print 'error occured: %s' % msg.get('source_addr')
-				stem.xbee.tx(dest_addr=msg.get('source_addr'), data='R');
-			
-			else:
+			if res.get('data') != None:
 				data = res.get('data')
 				readType = data.get('type')
 				"""
@@ -79,7 +75,9 @@ if __name__ == '__main__':
 					print 'pkg: %s' % pkg
 					#print fb.put(url, timeStamp, pkg)
 					#fb.put(url, timeStamp, pkg, {'print': 'silent'})
-				
+			else:
+				print 'error occured: %s' % msg.get('source_addr')
+				stem.xbee.tx(dest_addr=msg.get('source_addr'), data='R');
 				
 
 			#print msg
