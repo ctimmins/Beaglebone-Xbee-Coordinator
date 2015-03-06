@@ -47,37 +47,31 @@ if __name__ == '__main__':
 			res = stem.onMsgReceive(msg)
 			node = res.get('source')
 
+			data = res.get('data')
+			readType = data.get('type')
+			
 			"""
-			If there is an error from the checksum, send commands
-			back to PSoC for retransmit
+			send command back to PSoC to go back to sleep if the 
+			last message was sent from the PSoC
 			"""
-			if res.get('data') != None:
-				data = res.get('data')
-				readType = data.get('type')
-				"""
-				send command back to PSoC to go back to sleep if is the 
-				last message sent from the PSoC
-				"""
-				if readType == 'End_Frame':
-					stem.xbee.tx(dest_addr=msg.get('source_addr'), data='S')
-				"""
-				upload data to firebase if message type 
-				is not MLX config and NOT End of Frame
-				"""
-				if readType != 'MLX_CONFIG':
-					pkg = data.get('data')
-					# get time stamp of data collection
-					timeStamp = stem.getTime()
-					# build URL for PUT request
-					url = '%s/%s' % (node, readType)
-					print 'time stamp: %s' % timeStamp
-					print 'url: %s' % url
-					print 'pkg: %s' % pkg
-					#print fb.put(url, timeStamp, pkg)
-					#fb.put(url, timeStamp, pkg, {'print': 'silent'})
-			else:
-				print 'error occured: %s' % msg.get('source_addr')
-				stem.xbee.tx(dest_addr=msg.get('source_addr'), data='R');
+			if readType == 'End_Frame':
+				stem.xbee.tx(dest_addr=msg.get('source_addr'), data='S')
+			
+			"""
+			upload data to firebase if message type 
+			is not MLX config and NOT End of Frame
+			"""
+			if readType != 'MLX_CONFIG' and readType != 'End_Frame':
+				pkg = data.get('data')
+				# get time stamp of data collection
+				timeStamp = stem.getTime()
+				# build URL for PUT request
+				url = '%s/%s' % (node, readType)
+				print 'time stamp: %s' % timeStamp
+				print 'url: %s' % url
+				print 'pkg: %s' % pkg
+				#print fb.put(url, timeStamp, pkg)
+				#fb.put(url, timeStamp, pkg, {'print': 'silent'})
 				
 
 			#print msg

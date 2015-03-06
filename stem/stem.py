@@ -72,8 +72,8 @@ class Stem():
 
 
 		# if check_sum is not valid, return empty data
-		if not stem_helpers.verifyCheckSum(data[1:-1], check_sum, cmd):
-			return {'source': src, 'data': None}
+		# if not stem_helpers.verifyCheckSum(data[1:-1], check_sum, cmd):
+		# 	return {'source': src, 'data': None}
 
 		# use cmd to determine next action with remaining data
 		pkg = self.handleCommand(cmd, data[1:-1])
@@ -171,6 +171,7 @@ class Stem():
 				pkg = {}
 				pkg['type'] = 'End_Frame'
 				pkg['data'] = {}
+				return pkg
 
 		except IndexError:
 				print 'Index Error\n'
