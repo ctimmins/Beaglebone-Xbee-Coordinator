@@ -31,8 +31,9 @@ class Stem():
 		self.cmds = cmds 
 
 		#MLX settings
+                """
 		self.mlx = MLX({'V_th': 0x1A68,'Kt_1': 0x5B77,'Kt_2': 0x1234})
-
+                """
 		# Execute startup code
 		self.onStartup()
 
@@ -69,13 +70,14 @@ class Stem():
 		cmd = data[0]
 		check_sum = data[-1]
 
-		# if check_sum is not valid, set command to Checksum Error
+
+		# if check_sum is not valid, return empty data
 		if not stem_helpers.verifyCheckSum(data[1:-1], check_sum, cmd):
-			return self.handleCommand('CE') 
+			return {'source': src, 'data': None}
 
 		# use cmd to determine next action with remaining data
 		pkg = self.handleCommand(cmd, data[1:-1])
-		return [src, pkg]
+		return {'source': src, 'data':pkg}
 
 	"""
 	use predefined commands to handle incoming data
@@ -98,15 +100,21 @@ class Stem():
 				"""
 				handle MLX Compensation update
 				"""
-				print 'MLX compensation\n'
+				print 'MLX compensation'
+				pkg = {}
+				pkg['type'] = 'MLX_CONFIG'
+				pkg['data'] = {}
+				return pkg
 
 			elif cmd == self.cmds.get('MLX_PTAT'):
 				"""
 				handle MLX PTAT 
 				"""
 				print 'MLX PTAT'
-
 				pkg = {}
+				pkg['type'] = 'MLX_CONFIG'
+				pkg['data'] = {}
+				return pkg
 
 			elif cmd == self.cmds.get('IR_Low'):
 				"""
@@ -117,7 +125,6 @@ class Stem():
 				pkg['type'] = 'IR Readings'
 				pkg['data'] = self.onIrRead(data[0])
 				
-				print 'irl: %s' % pkg
 				return pkg
 
 			elif cmd == self.cmds.get('IR_High'):
@@ -128,7 +135,6 @@ class Stem():
 				pkg = {}
 				pkg['type'] = 'IR Readings'
 				pkg['data'] = self.onIrRead(data[0])
-				print 'irh: %s' % pkg
 
 				return pkg
 
@@ -149,12 +155,22 @@ class Stem():
 				handle Check sum error
 				"""
 				print 'Checksum Error\n'
+				return None
 
 			elif cmd == self.cmds.get('Who_Am_I'):
 				""" 
 				handle Who Am I
 				"""
 				print 'Who Am I\n'
+
+			elif cmd == self.cmds.get('End_Frame'):
+				"""
+				Handle end of frame
+				"""
+				print 'End of Frame'
+				pkg = {}
+				pkg['type'] = 'End_Frame'
+				pkg['data'] = {}
 
 		except IndexError:
 				print 'Index Error\n'
