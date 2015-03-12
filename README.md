@@ -2,9 +2,11 @@
 Coordinates a network of Xbee's and uploads sensor data to Firebase
 
 # Installation
+
 ### Install the NTP Software
 * The Beaglebone needs to accurately time stamp incoming messages every time it is booted up in order to effectively upload data to Firebase.
 * Follow the instructions as explained by [Derek Molloy](http://derekmolloy.ie/automatically-setting-the-beaglebone-black-time-using-ntp/)
+
 ### Install the Required Libraries and Packages
 assuming `pip` is installed, save the `requirements.txt` file and run `pip install -r requirements.txt`
 
