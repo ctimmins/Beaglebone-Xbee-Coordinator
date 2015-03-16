@@ -47,6 +47,62 @@ data array is passed into `stem.onVegRead()` function and a firebase package is 
 }
 ```
 
+
+`stem.handleCommand()` further packages the data object just received with `type` and `data` fields for easy URL building in main program.  Output of `stem.handleCommand()` looks like:
+
+```javascript
+{
+	"type": "soil sensors",
+	"data": {
+		"0": {
+			"vwc": 2.3465,
+			"temp": 22.3
+		},
+		"1": {
+		    	"vwc": 2.0056,
+		    	"temp": 21.9
+		},
+		"2": {
+		    	"vwc": 1.7319,
+		    	"temp": 21.8
+		},
+		"3": {
+		    	"vwc": 1.2765,
+		    	"temp": 21.1
+		}
+	}
+}
+```
+
+where again the received object is packaged with the source node with an output like:
+
+```javascript
+{
+	"source": src,
+	"pkg": {
+		"type": "soil sensors",
+		"data": {
+			"0": {
+				"vwc": 2.3465,
+				"temp": 22.3
+			},
+			"1": {
+			    	"vwc": 2.0056,
+			    	"temp": 21.9
+			},
+			"2": {
+			    	"vwc": 1.7319,
+			    	"temp": 21.8
+			},
+			"3": {
+			    	"vwc": 1.2765,
+			    	"temp": 21.1
+			}
+		}
+	}
+}
+```
+
 ## Firebase Data Format Sample
 ```javascript
 {	
