@@ -44,6 +44,10 @@ if __name__ == '__main__':
 		try:
 			print 'waiting for frame...'
 			msg = stem.xbee.wait_read_frame()
+			"""
+			parse incoming message and build package to send
+			to firebase.
+			"""
 			res = stem.onMsgReceive(msg)
 			node = res.get('source')
 
@@ -66,15 +70,16 @@ if __name__ == '__main__':
 				# get time stamp of data collection
 				timeStamp = stem.getTime()
 				# build URL for PUT request
-				url = '%s/%s' % (node, readType)
+				url = '%s/%s' % (readType, node)
 				print 'time stamp: %s' % timeStamp
 				print 'url: %s' % url
 				print 'pkg: %s' % pkg
 				#print fb.put(url, timeStamp, pkg)
-				#fb.put(url, timeStamp, pkg, {'print': 'silent'})
+				if readType == 'soil sensors':
+					print fb.put(url, timeStamp, pkg)
 				
 
-			#print msg
+			
 			print '--------------------------------'
 			sleep(0.25)
 		except KeyboardInterrupt:
