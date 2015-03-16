@@ -117,7 +117,7 @@ pkg = res.get("pkg")
 dataType = pkg.get("type")
 data = pkg.get("data")
 
-url = '%s/%s' % (readType, node)
+url = '%s/%s' % (dataType, node)
 timeStamp = stem.getTime()
 
 # {'print': 'silent'} header halves bandwidth of application by eliminating response back from Firebase servers
