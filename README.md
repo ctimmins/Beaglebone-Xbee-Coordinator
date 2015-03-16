@@ -11,7 +11,8 @@ Coordinates a network of Xbee's and uploads sensor data to Firebase
 ### Install the Required Libraries and Packages
 assuming `pip` is installed, save the `requirements.txt` file and run `pip install -r requirements.txt`
 
-## Vegetronix Data Format
+## Data Format
+##### Vegetronix Sample Reading
 `input = "V,0:2.3465:22.3,1:2.0056:21.9,2:1.7319:21.8,3:1.2765:21.1,C"`
 
 Python program splits the input wherever there are commas. `msg = input.split(",")` so the above becomes an array: 
@@ -74,7 +75,7 @@ data array is passed into `stem.onVegRead()` function and a firebase package is 
 }
 ```
 
-where again the received object is packaged with the source node with an output like:
+where again the received object is packaged with the source node with an output to main like:
 
 ```javascript
 {
@@ -102,6 +103,28 @@ where again the received object is packaged with the source node with an output 
 	}
 }
 ```
+
+## Main program
+*Waits for incoming XBee messages to parse and upload to Firebase*
+`msg = stem.xbee.wait_read_frame()`
+
+### Building the URL for Firebase
+After building a package like the one above, a URL is constructed to upload data in the correct location in Firebase. 
+```python
+res = stem.onMsgRecieve(msg)
+node = res.get("source")
+pkg = res.get("pkg")
+dataType = pkg.get("type")
+data = pkg.get("data")
+
+url = '%s/%s' % (readType, node)
+timeStamp = stem.getTime()
+
+# {'print': 'silent'} header halves bandwidth of application by eliminating response back from Firebase servers
+firebase.put(url, timeStamp, pkg, {'print': 'silent'})
+
+```
+Each location has top-level data fields for `node info`, `soil sensors`, and `IR readings`.  The type of command recieved from the node, will determine which of these fields the data is uploaded to.  Further, the source of the node determines where in `soil sensors` or `IR readings` the sensor data goes.
 
 ## Firebase Data Format Sample
 ```javascript
