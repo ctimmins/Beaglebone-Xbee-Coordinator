@@ -7,22 +7,12 @@ chadtimmins@gmail.com
 Provides a set of functions specific to our senior design agricultural monitoring system 
 """
 
-import serial
-from xbee import XBee
 from datetime import datetime
 import stem_helpers
-import Adafruit_BBIO.UART as BB_UART
 import numpy as np
 
 class Stem():
 	def __init__(self, uart='UART2', port='/dev/ttyO2', baud=9600, cmds={}):
-		# open uart port
-		BB_UART.setup(uart)
-		print '\n%s opened on %s\n' % (uart, port)
-
-		# instantiate XBee and serial port objects
-		self.serial = serial.Serial(port, baud)
-		self.xbee = XBee(self.serial, escaped=True)
 
 		# make data structure to hold node settings
 		self.nodes = {}
@@ -38,9 +28,7 @@ class Stem():
 		self.onStartup()
 
 	def __del__(self):
-		if self.serial.isOpen():
-			print '\nclosing serial port from Class\n'
-			self.serial.close()
+		print '\nDeleting STEM object\n'
 	
 	def getTime(self):
 		return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -174,7 +162,9 @@ class Stem():
 				return pkg
 
 		except IndexError:
-				print 'Index Error\n'
+			print 'Index Error\n'
+		except AttributeError:
+			print 'AttributeError\n'
 
 	"""
 	handles vegetronix data
