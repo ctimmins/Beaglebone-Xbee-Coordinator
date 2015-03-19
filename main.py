@@ -31,9 +31,13 @@ if __name__ == '__main__':
 
 	# defined commands to SEND to sensor
 	psoc_cmds = {
-		'sleep':  'S',
-		'resend': 'R',
+		'sleep':    'S',
+		'resend':   'R',
+		'set_rate': 'C'
 	}
+
+	# name of site for Firebase
+	SITE_NAME = "Jess S. Jackson"
 
 
 
@@ -51,8 +55,8 @@ if __name__ == '__main__':
 			res = stem.onMsgReceive(msg)
 			node = res.get('source')
 
-			data = res.get('data')
-			readType = data.get('type')
+			pkg = res.get('pkg')
+			readType = pkg.get('type')
 			
 			"""
 			send command back to PSoC to go back to sleep if the 
@@ -66,17 +70,17 @@ if __name__ == '__main__':
 			is not MLX config and NOT End of Frame
 			"""
 			if readType != 'MLX_CONFIG' and readType != 'End_Frame':
-				pkg = data.get('data')
+				data = pkg.get('data')
 				# get time stamp of data collection
 				timeStamp = stem.getTime()
 				# build URL for PUT request
-				url = '%s/%s' % (readType, node)
+				url = '%s/%s/%s' % (SITE_NAME, readType, node)
 				print 'time stamp: %s' % timeStamp
 				print 'url: %s' % url
-				print 'pkg: %s' % pkg
-				#print fb.put(url, timeStamp, pkg)
+				print 'pkg: %s' % data
+				# only send soil readings to firebase for now...
 				if readType == 'soil sensors':
-					print fb.put(url, timeStamp, pkg)
+					print fb.put(url, timeStamp, data)
 				
 
 			

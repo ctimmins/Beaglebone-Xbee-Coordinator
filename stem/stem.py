@@ -77,7 +77,7 @@ class Stem():
 
 		# use cmd to determine next action with remaining data
 		pkg = self.handleCommand(cmd, data[1:-1])
-		return {'source': src, 'data':pkg}
+		return {'source': src, 'pkg':pkg}
 
 	"""
 	use predefined commands to handle incoming data
